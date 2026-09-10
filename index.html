@@ -6,717 +6,687 @@
   <title>Zainab Khan</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --navy:      #0f1b2d;
-      --navy-mid:  #162338;
-      --navy-soft: #1e2f47;
-      --lilac:     #c4b5e8;
-      --lilac-dim: #9b8dc2;
-      --blush:     #e8b5cc;
-      --fog:       #d6dff0;
-      --white:     #f2f0f8;
-      --muted:     rgba(196,181,232,0.55);
-      --font-display: 'Cormorant Garamond', serif;
-      --font-body:    'Inter', sans-serif;
+      --black:         #060a10;
+      --navy:          #0a1520;
+      --card:          #0d1b2a;
+      --card-hover:    #112236;
+      --border:        rgba(180,200,230,0.16);
+      --silver:        #c2d0e8;
+      --silver-dim:    #7a8fa8;
+      --silver-bright: #dde8f5;
+      --lilac:         #c9bde8;
+      --blush:         #e8c4d4;
+      --white:         #f0f4fa;
+      --font-display: 'Playfair Display', serif;
+      --font-body:    'Outfit', sans-serif;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html, body { height: 100%; overflow: hidden; }
 
     body {
-      background: var(--navy);
+      background: var(--black);
       color: var(--white);
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 16px;
-      line-height: 1.65;
-      overflow-x: hidden;
+      font-size: 13px;
+      line-height: 1.5;
+      cursor: none;
     }
 
-    #wc-canvas {
+    /* Sparkle */
+    #cursor {
       position: fixed;
-      inset: 0;
-      z-index: 0;
+      width: 7px; height: 7px;
+      background: var(--silver);
+      border-radius: 50%;
       pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: screen;
+    }
+    #sparkle-canvas {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* Watercolor bg */
+    #wc {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    #wc svg { width: 100%; height: 100%; }
+
+    /* Layout */
+    #app {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 260px 1fr 1.4fr;
+      grid-template-rows: auto 1fr 1fr;
+      gap: 10px;
+      padding: 14px;
+    }
+
+    /* Cards */
+    .card {
+      background: rgba(11,19,32,0.82);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      backdrop-filter: blur(14px);
       overflow: hidden;
-    }
-    #wc-canvas svg { width: 100%; height: 100%; }
-
-    nav, main, footer { position: relative; z-index: 1; }
-
-    /* Nav */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 22px 6vw;
-      background: rgba(15,27,45,0.7);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(196,181,232,0.1);
+      box-shadow: 0 0 0 0.5px rgba(180,200,230,0.06) inset, 0 4px 24px rgba(0,0,0,0.35);
     }
 
-    .nav-tagline {
-      font-family: var(--font-body);
-      font-size: 0.72rem;
-      font-weight: 400;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--lilac-dim);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2.2rem;
-      list-style: none;
-    }
-    .nav-links a {
-      text-decoration: none;
-      font-size: 0.78rem;
-      font-weight: 400;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--lilac); }
-
-    /* Hero */
-    #hero {
-      min-height: 100vh;
+    /* ── Header card (top left) ── */
+    #card-header {
+      grid-column: 1;
+      grid-row: 1;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: 0 6vw 10vh;
+      justify-content: space-between;
+      padding: 20px 22px;
     }
 
-    .hero-tag {
+    .name {
+      font-family: var(--font-display);
+      font-size: 1.85rem;
+      font-weight: 500;
+      line-height: 1.05;
+      color: var(--silver-bright);
+      white-space: nowrap;
+      text-shadow: 0 0 40px rgba(180,200,230,0.25);
+    }
+
+    .title-line {
       font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--lilac-dim);
-      margin-bottom: 1.4rem;
+      color: var(--silver);
+      letter-spacing: 0.08em;
+      margin-top: 5px;
     }
 
-    .hero-name {
-      font-family: var(--font-display);
-      font-size: clamp(3rem, 7.5vw, 6.5rem);
-      font-weight: 300;
-      line-height: 0.95;
-      letter-spacing: -0.01em;
-      color: var(--white);
-      margin-bottom: 0.4rem;
-    }
-    .hero-name em {
-      font-style: italic;
-      color: var(--lilac);
-    }
-
-    .hero-role {
-      font-family: var(--font-display);
-      font-size: clamp(1rem, 2.2vw, 1.45rem);
-      font-style: italic;
-      font-weight: 300;
-      color: var(--blush);
-      margin-bottom: 2rem;
-      opacity: 0.85;
-    }
-
-    .hero-desc {
-      max-width: 500px;
-      color: var(--fog);
-      font-size: 0.95rem;
-      line-height: 1.8;
-      margin-bottom: 2.8rem;
-      font-weight: 300;
-    }
-
-    .hero-cta {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-block;
-      text-decoration: none;
-      padding: 11px 26px;
-      border-radius: 3px;
-      font-size: 0.78rem;
-      font-weight: 400;
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.65rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      transition: transform 0.2s, opacity 0.2s;
+      color: var(--silver);
+      border: 1px solid rgba(168,180,200,0.2);
+      border-radius: 20px;
+      padding: 4px 10px;
+      margin-top: 10px;
+      width: fit-content;
     }
-    .btn:hover { transform: translateY(-2px); opacity: 0.85; }
-    .btn-primary { background: var(--lilac); color: var(--navy); }
-    .btn-ghost { background: transparent; color: var(--lilac); border: 1px solid rgba(196,181,232,0.4); }
-
-    /* Sections */
-    section { padding: 110px 6vw; }
-
-    .eyebrow {
-      font-size: 0.68rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--lilac-dim);
-      margin-bottom: 0.8rem;
-    }
-
-    .s-title {
-      font-family: var(--font-display);
-      font-size: clamp(2.2rem, 4.5vw, 3.4rem);
-      font-weight: 300;
-      line-height: 1.1;
-      letter-spacing: -0.01em;
-      color: var(--white);
-      margin-bottom: 3rem;
-    }
-    .s-title em { font-style: italic; color: var(--lilac); }
-
-    .wc-rule {
-      width: 60px;
-      height: 2px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, var(--lilac), var(--blush));
-      margin-bottom: 2.5rem;
-      opacity: 0.6;
-    }
-
-    /* About */
-    #about {
-      background: rgba(22,35,56,0.55);
-      backdrop-filter: blur(4px);
-      border-top: 1px solid rgba(196,181,232,0.07);
-      border-bottom: 1px solid rgba(196,181,232,0.07);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 3fr 2fr;
-      gap: 5rem;
-      align-items: start;
-    }
-
-    .about-body p {
-      color: var(--fog);
-      font-size: 1rem;
-      line-height: 1.85;
-      margin-bottom: 1.2rem;
-    }
-    .about-body p strong { color: var(--lilac); font-weight: 400; }
-
-    .aside-block {
-      border-left: 1px solid rgba(196,181,232,0.2);
-      padding-left: 2rem;
-    }
-    .aside-item { margin-bottom: 2rem; }
-    .aside-label {
-      font-size: 0.68rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--lilac-dim);
-      margin-bottom: 0.4rem;
-    }
-    .aside-val { color: var(--fog); font-size: 0.9rem; line-height: 1.6; }
-    .aside-val a { color: var(--blush); text-decoration: none; }
-    .aside-val a:hover { text-decoration: underline; }
-
-    /* Experience */
-    .exp-list { display: flex; flex-direction: column; }
-
-    .exp-item {
-      display: grid;
-      grid-template-columns: 160px 1fr;
-      gap: 2rem;
-      padding: 2rem 0;
-      border-bottom: 1px solid rgba(196,181,232,0.1);
-    }
-    .exp-item:first-child { border-top: 1px solid rgba(196,181,232,0.1); }
-
-    .exp-date { font-size: 0.78rem; color: var(--lilac-dim); letter-spacing: 0.04em; padding-top: 3px; }
-
-    .exp-role {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      font-weight: 300;
-      color: var(--white);
-      margin-bottom: 0.2rem;
-    }
-
-    .exp-org { font-size: 0.82rem; color: var(--blush); margin-bottom: 0.6rem; letter-spacing: 0.03em; }
-    .exp-org a { color: var(--blush); text-decoration: none; }
-    .exp-org a:hover { text-decoration: underline; }
-
-    .exp-desc { font-size: 0.88rem; color: var(--fog); line-height: 1.7; opacity: 0.8; }
-
-    .exp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; }
-    .exp-tag {
-      font-size: 0.68rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 2px;
-      border: 1px solid rgba(196,181,232,0.25);
-      color: var(--lilac-dim);
-    }
-
-    /* Projects */
-    #projects { background: rgba(22,35,56,0.55); backdrop-filter: blur(4px); }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5px;
-    }
-
-    .proj-card {
-      background: rgba(15,27,45,0.6);
-      border: 1px solid rgba(196,181,232,0.1);
-      padding: 2.2rem;
-      transition: border-color 0.25s, background 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-    .proj-card::before {
+    .status-pill::before {
       content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, var(--lilac), var(--blush));
-      opacity: 0;
-      transition: opacity 0.25s;
-    }
-    .proj-card:hover { border-color: rgba(196,181,232,0.25); background: rgba(30,47,71,0.7); }
-    .proj-card:hover::before { opacity: 1; }
-
-    .proj-type { font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lilac-dim); margin-bottom: 1rem; }
-    .proj-title { font-family: var(--font-display); font-size: 1.45rem; font-weight: 300; color: var(--white); margin-bottom: 0.7rem; line-height: 1.2; }
-    .proj-desc { font-size: 0.87rem; color: var(--fog); line-height: 1.7; opacity: 0.75; margin-bottom: 1.6rem; }
-    .proj-link { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lilac); text-decoration: none; transition: letter-spacing 0.2s; }
-    .proj-link:hover { letter-spacing: 0.16em; }
-
-    /* Skills */
-    .skills-wrap {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 2rem;
-    }
-
-    .skill-col-label {
-      font-size: 0.68rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--lilac-dim);
-      margin-bottom: 1rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 1px solid rgba(196,181,232,0.15);
-    }
-
-    .skill-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
-    .skill-list li { font-size: 0.9rem; color: var(--fog); display: flex; align-items: center; gap: 0.6rem; }
-    .skill-list li::before {
-      content: '';
-      width: 4px; height: 4px;
+      width: 5px; height: 5px;
       border-radius: 50%;
       background: var(--lilac);
-      opacity: 0.5;
       flex-shrink: 0;
     }
 
-    /* Volunteering */
-    #volunteering { background: rgba(22,35,56,0.55); backdrop-filter: blur(4px); }
+    .social-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .social-row a {
+      text-decoration: none;
+      color: var(--silver-dim);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 4px 10px;
+      transition: color 0.2s, border-color 0.2s;
+      cursor: none;
+    }
+    .social-row a:hover { color: var(--white); border-color: rgba(168,180,200,0.3); }
 
-    .vol-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.5rem;
+    /* ── Bio card (top middle) ── */
+    #card-bio {
+      grid-column: 2;
+      grid-row: 1;
+      display: flex;
+      align-items: center;
+    }
+    #card-bio p {
+      color: var(--silver);
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+    #card-bio p strong { color: var(--white); font-weight: 400; }
+    #card-bio a { color: var(--blush); text-decoration: none; }
+
+    /* ── Currently card (top right) ── */
+    #card-currently {
+      grid-column: 3;
+      grid-row: 1;
+    }
+    .currently-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+      margin-bottom: 10px;
+    }
+    .currently-item {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 9px;
+      padding-bottom: 9px;
+      border-bottom: 1px solid var(--border);
+    }
+    .currently-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .currently-role { font-size: 0.8rem; color: var(--white); font-weight: 400; }
+    .currently-org { font-size: 0.72rem; color: var(--blush); }
+    .cert-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .cert-tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      padding: 2px 8px;
+      border: 1px solid rgba(168,180,200,0.15);
+      border-radius: 3px;
+      color: var(--silver-dim);
     }
 
-    .vol-card {
-      border: 1px solid rgba(196,181,232,0.1);
-      padding: 1.6rem;
-      border-radius: 2px;
+    /* ── Experience card (right col, rows 2-3) ── */
+    #card-exp {
+      grid-column: 3;
+      grid-row: 2 / 4;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
-    .vol-role { font-family: var(--font-display); font-size: 1.1rem; font-weight: 300; color: var(--white); margin-bottom: 0.25rem; }
-    .vol-org { font-size: 0.8rem; color: var(--blush); margin-bottom: 0.4rem; }
-    .vol-date { font-size: 0.72rem; color: var(--lilac-dim); }
-
-    /* Contact */
-    #contact { text-align: center; }
-    #contact .s-title { margin: 0 auto 1rem; }
-
-    .contact-sub {
-      max-width: 420px;
-      margin: 0 auto 2.8rem;
-      color: var(--fog);
-      font-size: 0.95rem;
-      line-height: 1.8;
-      opacity: 0.8;
+    .section-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+      margin-bottom: 10px;
+      flex-shrink: 0;
     }
 
-    .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    .exp-scroll {
+      overflow-y: auto;
+      flex: 1;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(168,180,200,0.15) transparent;
+    }
+    .exp-scroll::-webkit-scrollbar { width: 3px; }
+    .exp-scroll::-webkit-scrollbar-thumb { background: rgba(168,180,200,0.15); border-radius: 3px; }
 
-    /* Footer */
-    footer {
-      padding: 2rem 6vw;
+    .exp-row {
+      display: flex;
+      flex-direction: column;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .exp-row:last-child { border-bottom: none; }
+
+    .exp-top {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      font-size: 0.75rem;
-      color: var(--muted);
-      border-top: 1px solid rgba(196,181,232,0.07);
+      align-items: baseline;
+      gap: 6px;
+    }
+    .exp-role { font-size: 0.8rem; color: var(--silver-bright); font-weight: 400; line-height: 1.3; }
+    .exp-date { font-size: 0.62rem; color: var(--silver-dim); white-space: nowrap; flex-shrink: 0; }
+    .exp-org { font-size: 0.7rem; color: var(--blush); margin-top: 1px; }
+    .exp-desc { font-size: 0.72rem; color: var(--silver-dim); margin-top: 2px; line-height: 1.45; }
+
+    /* ── Projects card (middle, rows 2-3) ── */
+    #card-projects {
+      grid-column: 2;
+      grid-row: 2 / 3;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
-      .nav-links { display: none; }
-      .nav-tagline { display: none; }
-      footer { flex-direction: column; gap: 0.4rem; text-align: center; }
+    .proj-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .btn, .proj-card, .proj-link { transition: none; }
+    .proj-item {
+      background: rgba(8,12,18,0.5);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .proj-item:hover { border-color: rgba(168,180,200,0.22); background: rgba(20,32,53,0.6); }
+    .proj-item-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .proj-name { font-size: 0.85rem; font-weight: 400; color: var(--white); }
+    .proj-arrow {
+      font-size: 0.7rem;
+      color: var(--silver-dim);
+      text-decoration: none;
+      cursor: none;
+      transition: color 0.2s;
+    }
+    .proj-arrow:hover { color: var(--silver); }
+    .proj-type-tag { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--silver-dim); }
+    .proj-desc-text { font-size: 0.75rem; color: var(--silver-dim); line-height: 1.5; }
+
+    /* ── Skills + Volunteering (right col rows 2-3) ── */
+    #card-skills {
+      grid-column: 2;
+      grid-row: 3;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .skills-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      flex: 1;
+    }
+    .skill-group-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+      margin-bottom: 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--border);
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .skill-tag {
+      font-size: 0.65rem;
+      padding: 2px 7px;
+      border: 1px solid rgba(180,200,230,0.18);
+      border-radius: 3px;
+      color: var(--silver);
+    }
+
+    /* ── Volunteering card ── */
+    #card-vol {
+      grid-column: 1;
+      grid-row: 2 / 4;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .vol-count {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--silver-bright);
+      line-height: 1;
+      margin-bottom: 3px;
+      text-shadow: 0 0 30px rgba(180,200,230,0.3);
+    }
+    .vol-sub {
+      font-size: 0.72rem;
+      color: var(--silver);
+      margin-bottom: 10px;
+    }
+    .vol-pills { display: flex; flex-wrap: wrap; gap: 5px; overflow: hidden; }
+    .vol-pill {
+      font-size: 0.65rem;
+      padding: 3px 9px;
+      border: 1px solid rgba(180,200,230,0.12);
+      border-radius: 20px;
+      color: var(--silver-dim);
+    }
+    .vol-pill.highlight { color: var(--silver); border-color: rgba(180,200,230,0.25); }
+
+    @media (max-width: 1024px) {
+      html, body { overflow: auto; }
+      #app {
+        height: auto;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+      }
+      #card-header { grid-column: 1; grid-row: 1; }
+      #card-bio { grid-column: 2; grid-row: 1; }
+      #card-currently { grid-column: 1 / 3; grid-row: 2; }
+      #card-exp { grid-column: 1 / 3; grid-row: 3; max-height: 400px; }
+      #card-projects { grid-column: 1; grid-row: 4; }
+      #card-skills { grid-column: 2; grid-row: 4; }
+      #card-vol { grid-column: 1 / 3; grid-row: 5; }
+      body { cursor: auto; }
+      #cursor, #sparkle-canvas { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <div id="wc-canvas" aria-hidden="true">
-    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <filter id="b1" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="60"/></filter>
-        <filter id="b2" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="80"/></filter>
-        <filter id="b3" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="50"/></filter>
-      </defs>
-      <ellipse cx="1200" cy="180" rx="420" ry="320" fill="#7c6bbd" opacity="0.18" filter="url(#b1)"/>
-      <ellipse cx="220" cy="520" rx="340" ry="260" fill="#c4789a" opacity="0.14" filter="url(#b2)"/>
-      <ellipse cx="1300" cy="800" rx="380" ry="260" fill="#9b8dc2" opacity="0.12" filter="url(#b1)"/>
-      <ellipse cx="680" cy="420" rx="300" ry="200" fill="#b0c0e0" opacity="0.07" filter="url(#b3)"/>
-    </svg>
+<div id="cursor"></div>
+<canvas id="sparkle-canvas"></canvas>
+
+<div id="wc" aria-hidden="true">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="80"/></filter>
+      <filter id="b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="100"/></filter>
+    </defs>
+    <ellipse cx="1200" cy="150" rx="400" ry="280" fill="#1e3d6a" opacity="0.45" filter="url(#b1)"/>
+    <ellipse cx="900"  cy="600" rx="320" ry="220" fill="#2a3f60" opacity="0.25" filter="url(#b1)"/>
+    <ellipse cx="160"  cy="500" rx="280" ry="200" fill="#6050a0" opacity="0.1"  filter="url(#b2)"/>
+    <ellipse cx="1350" cy="820" rx="300" ry="200" fill="#904060" opacity="0.1"  filter="url(#b1)"/>
+    <ellipse cx="500"  cy="200" rx="200" ry="140" fill="#3a5888" opacity="0.15" filter="url(#b1)"/>
+  </svg>
+</div>
+
+<div id="app">
+
+  <!-- Header -->
+  <div class="card" id="card-header">
+    <div>
+      <div class="name">Zainab Khan</div>
+      <div class="title-line">University of Toronto · Strategy, Research, People</div>
+      <div class="status-pill">Open to Winter Internships</div>
+    </div>
+    <div class="social-row">
+      <a href="mailto:zainabb.khan@mail.utoronto.ca">Email</a>
+      <a href="https://linkedin.com/in/zainabb-khan1" target="_blank">LinkedIn</a>
+      <a href="https://github.com/zainabbk" target="_blank">GitHub</a>
+    </div>
   </div>
 
-  <nav>
-    <div class="nav-tagline">Strategy · Research · People</div>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+  <!-- Bio -->
+  <div class="card" id="card-bio">
+    <p>
+      I'm a student at the <strong>University of Toronto</strong> and spend most of my time at the intersection of data, people, and systems. I've worked in health research, business analysis, and technical operations - not because I couldn't pick a lane, but because I find all of it interesting and it fits my strengths.<br /><br />
+      Right now I'm a <strong>Technical Operations Intern at Dayforce</strong>, while actively working at a stealth startup. I'm looking for <strong>winter internships</strong> in project management, strategy, ops, or anything at the intersection of health and tech. Outside of that: I enjoy photography, share food content at <a href="https://instagram.com/teastheday" target="_blank">@teastheday</a>, and love building and organizing things. I've also logged 2,000+ hours of volunteering - giving back has always been part of who I am.
+    </p>
+  </div>
 
-  <main>
+  <!-- Currently -->
+  <div class="card" id="card-currently">
+    <div class="currently-label">Currently</div>
+    <div class="currently-item">
+      <span class="currently-role">Technical Operations Intern</span>
+      <span class="currently-org">Dayforce</span>
+    </div>
+    <div class="currently-item">
+      <span class="currently-role">Research Assistant</span>
+      <span class="currently-org">MAPELab, Rotman - University of Toronto</span>
+    </div>
+    <div class="currently-item">
+      <span class="currently-role">Campus Leader</span>
+      <span class="currently-org">Notion</span>
+    </div>
+    <div class="cert-row">
+      <span class="cert-tag">CAPM Candidate</span>
+      <span class="cert-tag">Google PM</span>
+      <span class="cert-tag">Bloomberg BMC</span>
+      <span class="cert-tag">GCP Certified</span>
+    </div>
+  </div>
 
-    <!-- Hero -->
-    <section id="hero">
-      <p class="hero-tag">Open to Fall 2026 internships</p>
-      <h1 class="hero-name">Zainab<br /><em>Khan.</em></h1>
-      <p class="hero-role">Turning complex problems into clear, human-centered strategy.</p>
-      <p class="hero-desc">
-        HBSc student at the University of Toronto and a CAPM candidate. I bring research rigor and people skills to strategy, operations, and project management - with a long-run interest in healthcare systems and high-growth organizations.
-      </p>
-      <div class="hero-cta">
-        <a href="#experience" class="btn btn-primary">See my work</a>
-        <a href="mailto:zainabb.khan@mail.utoronto.ca" class="btn btn-ghost">Get in touch</a>
-      </div>
-    </section>
+  <!-- Experience -->
+  <div class="card" id="card-exp">
+    <div class="section-label">Experience</div>
+    <div class="exp-scroll">
 
-    <!-- About -->
-    <section id="about">
-      <p class="eyebrow">About</p>
-      <div class="wc-rule"></div>
-      <div class="about-grid">
-        <div class="about-body">
-          <h2 class="s-title">A bit about<br /><em>who I am.</em></h2>
-          <p>
-            I'm a student at U of T and spend most of my time at the intersection of <strong>data, people, and systems</strong>. I've worked in health research, business analysis and consulting - not because I couldn't pick a lane, but because I genuinely find all of it interesting.
-          </p>
-          <p>
-            Right now I'm a Research Assistant at <strong>MAPELab at Rotman</strong> and a CAPM candidate, while actively working on side projects (coming soon)! I'm looking for <strong>fall internships</strong> in project management, strategy, ops, or anything at the intersection of health and tech.
-          </p>
-          <p>
-            Outside of that: I founded a photography club at Queen's, I share food content at <a href="https://instagram.com/teastheday" target="_blank" style="color:var(--blush)">@teastheday</a>, and I'm building a FIFA social app (very excited for this!). I've also logged 2,000+ hours of volunteering - giving back to community has always been part of who I am.
-          </p>
+      <div class="exp-row">
+        <div class="exp-top">
+          <span class="exp-role">Technical Operations Intern</span>
+          <span class="exp-date">Sep 2026 - Present</span>
         </div>
-        <div class="aside-block">
-          <div class="aside-item">
-            <p class="aside-label">Currently</p>
-            <p class="aside-val">Research Assistant, Rotman MAPELab<br />Toronto, Ontario</p>
-          </div>
-          <div class="aside-item">
-            <p class="aside-label">Certifications</p>
-            <p class="aside-val">CAPM Candidate (PMI)<br />Google PM Certificate<br />Bloomberg Market Concepts</p>
-          </div>
-          <div class="aside-item">
-            <p class="aside-label">Open to</p>
-            <p class="aside-val">PM internships · Analyst roles<br />Strategy and ops · Research</p>
-          </div>
-        </div>
+        <span class="exp-org">Dayforce</span>
+        <span class="exp-desc">Supporting technical operations, process improvement, and cross-functional coordination at a leading HCM platform.</span>
       </div>
-    </section>
 
-    <!-- Experience -->
-    <section id="experience">
-      <p class="eyebrow">Experience</p>
-      <h2 class="s-title">Where I've<br /><em>contributed.</em></h2>
-      <div class="exp-list">
+      <div class="exp-row">
+        <div class="exp-top">
+          <span class="exp-role">Campus Leader</span>
+          <span class="exp-date">Aug 2026 - Present</span>
+        </div>
+        <span class="exp-org">Notion</span>
+        <span class="exp-desc">Growing Notion's presence at University of Toronto through events and community building.</span>
+      </div>
 
-        <div class="exp-item">
+      <div class="exp-row">
+        <div class="exp-top">
+          <span class="exp-role">Fellow</span>
+          <span class="exp-date">Jul 2026 - Present</span>
+        </div>
+        <span class="exp-org">Intern Insider</span>
+        <span class="exp-desc">Selected fellow contributing to a community helping students navigate internships and early careers.</span>
+      </div>
+
+      <div class="exp-row">
+        <div class="exp-top">
+          <span class="exp-role">Case Manager Intern</span>
+          <span class="exp-date">Jun - Aug 2026</span>
+        </div>
+        <span class="exp-org">Sentrex Health Solutions</span>
+        <span class="exp-desc">Managed patient cases across specialty pharmacy workflows using Salesforce and PM methodologies.</span>
+      </div>
+
+      <div class="exp-row">
+        <div class="exp-top">
+          <span class="exp-role">Research Assistant</span>
           <span class="exp-date">Sep 2025 - Present</span>
-          <div>
-            <p class="exp-role">Research Assistant</p>
-            <p class="exp-org"><a href="https://www.mapelabuoft.com/about" target="_blank">MAPELab, Rotman School of Management - UofT</a></p>
-            <p class="exp-desc">Manage research workflows across concurrent projects, coordinating timelines and deliverables with faculty, PhD students, and cross-functional teams. Conduct quantitative analysis on organizational datasets using Python, R, and Excel, and present findings in executive-style reports for academic audiences.</p>
-            <div class="exp-tags">
-              <span class="exp-tag">Python</span><span class="exp-tag">R</span><span class="exp-tag">Excel</span><span class="exp-tag">Research Design</span>
-            </div>
-          </div>
         </div>
+        <span class="exp-org">MAPELab, Rotman - University of Toronto</span>
+        <span class="exp-desc">Quantitative analysis on organizational datasets using Python, R, and Excel; executive-style research reports for faculty.</span>
+      </div>
 
-        <div class="exp-item">
-          <span class="exp-date">Jan 2026 - Apr 2026</span>
-          <div>
-            <p class="exp-role">Business and Financial Analyst</p>
-            <p class="exp-org">Your Downtown Doula (via Riipen) - Contract</p>
-            <p class="exp-desc">Evaluated market expansion feasibility for a Toronto-based healthcare company. Analyzed financial and operational data, assessed competitor positioning, and built workflow tracking systems using Asana and Jira to improve cross-functional visibility. Delivered recommendations that directly shaped expansion planning.</p>
-            <div class="exp-tags">
-              <span class="exp-tag">Financial Modelling</span><span class="exp-tag">Market Research</span><span class="exp-tag">Jira</span><span class="exp-tag">Asana</span><span class="exp-tag">Excel</span>
-            </div>
-          </div>
+      <div class="exp-row">
+        <div class="exp-top">
+          <span class="exp-role">Business and Financial Analyst</span>
+          <span class="exp-date">Jan - Apr 2026</span>
         </div>
+        <span class="exp-org">Your Downtown Doula (via Riipen)</span>
+        <span class="exp-desc">Evaluated healthcare market expansion feasibility; financial modelling, competitor analysis, workflow systems in Jira and Asana.</span>
+      </div>
 
-        <div class="exp-item">
+      <div class="exp-row">
+        <div class="exp-top">
+          <span class="exp-role">Research Assistant</span>
           <span class="exp-date">Oct 2025 - Mar 2026</span>
-          <div>
-            <p class="exp-role">Research Assistant</p>
-            <p class="exp-org">Munk School of Global Affairs and Public Policy - UofT</p>
-            <p class="exp-desc">On-call research support for global affairs faculty. Streamlined datasets and processes in Excel, assisted with data collection and literature synthesis using Python.</p>
-            <div class="exp-tags">
-              <span class="exp-tag">Python</span><span class="exp-tag">Excel</span><span class="exp-tag">Policy Research</span>
-            </div>
-          </div>
         </div>
+        <span class="exp-org">Munk School of Global Affairs - University of Toronto</span>
+        <span class="exp-desc">On-call research support; streamlined datasets and processes in Excel and Python for global affairs faculty.</span>
+      </div>
 
-        <div class="exp-item">
+      <div class="exp-row">
+        <div class="exp-top">
+          <span class="exp-role">Peer Career Facilitator</span>
           <span class="exp-date">Sep 2025 - Mar 2026</span>
-          <div>
-            <p class="exp-role">Peer Career Facilitator</p>
-            <p class="exp-org">Career Exploration and Education, University of Toronto</p>
-            <p class="exp-desc">Coordinated career programming for 200+ students including the UofT Career Fair (3,000+ attendees). Facilitated employer info sessions with companies like Stripe and Google, managed stakeholder relationships, and provided one-on-one resume and cover letter coaching.</p>
-            <div class="exp-tags">
-              <span class="exp-tag">Facilitation</span><span class="exp-tag">Event Coordination</span><span class="exp-tag">Stakeholder Management</span>
-            </div>
-          </div>
         </div>
-
-        <div class="exp-item">
-          <span class="exp-date">Jul 2025 - Dec 2025</span>
-          <div>
-            <p class="exp-role">Research Assistant</p>
-            <p class="exp-org">University Health Network / St. Michael's Hospital</p>
-            <p class="exp-desc">Contributed to nutritional sciences research on plant-based nutrition and dietary health outcomes. Worked across SQL and Python under GCP-certified research protocols.</p>
-            <div class="exp-tags">
-              <span class="exp-tag">SQL</span><span class="exp-tag">Python</span><span class="exp-tag">Nutritional Sciences</span><span class="exp-tag">GCP Certified</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="exp-item">
-          <span class="exp-date">May 2024 - Aug 2024</span>
-          <div>
-            <p class="exp-role">Summer Consulting Intern</p>
-            <p class="exp-org">Prollenium Medical Technologies</p>
-            <p class="exp-desc">Performed root cause analysis on an R&D workflow issue causing approximately $3,000 in losses, contributing to revised operating procedures and measurable process improvements. Supported risk assessments and operational reviews across R&D to strengthen internal controls and regulatory alignment.</p>
-            <div class="exp-tags">
-              <span class="exp-tag">Root Cause Analysis</span><span class="exp-tag">Process Improvement</span><span class="exp-tag">Risk Assessment</span>
-            </div>
-          </div>
-        </div>
-
-
-
+        <span class="exp-org">Career Exploration and Education, University of Toronto</span>
+        <span class="exp-desc">Coordinated programming for 200+ students; facilitated Stripe, Google info sessions; 1-on-1 resume advising.</span>
       </div>
-    </section>
 
-    <!-- Projects -->
-    <section id="projects">
-      <p class="eyebrow">Projects</p>
-      <h2 class="s-title">Things I've<br /><em>built.</em></h2>
-      <div class="projects-grid">
-
-        <div class="proj-card">
-          <p class="proj-type">Computational Biology - TBH Bioinformatics Competition</p>
-          <h3 class="proj-title">Splice Site Strength Quantification</h3>
-          <p class="proj-desc">Built a cross-species computational framework to quantify splice site strength and uncover evolutionary patterns in vertebrate splicing. Submitted to the TBH Bioinformatics Competition.</p>
-          <a href="https://devpost.com/software/splice-site-strength-quantification" target="_blank" class="proj-link">View on Devpost</a>
+      <div class="exp-row">
+        <div class="exp-top">
+          <span class="exp-role">Research Assistant</span>
+          <span class="exp-date">Jul - Dec 2025</span>
         </div>
-
-        <div class="proj-card">
-          <p class="proj-type">Coming soon</p>
-          <h3 class="proj-title">Project Two</h3>
-          <p class="proj-desc">Currently building. Drop back in soon - or reach out if you want to hear what's in progress.</p>
-          <a href="mailto:zainabb.khan@mail.utoronto.ca" class="proj-link">Get in touch</a>
-        </div>
-
-        <div class="proj-card">
-          <p class="proj-type">Coming soon</p>
-          <h3 class="proj-title">Project Three</h3>
-          <p class="proj-desc">Always working on something new. More to come.</p>
-          <a href="mailto:zainabb.khan@mail.utoronto.ca" class="proj-link">Get in touch</a>
-        </div>
-
+        <span class="exp-org">UHN / St. Michael's Hospital</span>
+        <span class="exp-desc">Nutritional sciences research on plant-based diets using SQL and Python under GCP protocols.</span>
       </div>
-    </section>
 
-    <!-- Skills -->
-    <section id="skills">
-      <p class="eyebrow">Skills</p>
-      <h2 class="s-title">What I<br /><em>bring.</em></h2>
-      <div class="skills-wrap">
-
-        <div>
-          <p class="skill-col-label">Strategy and PM</p>
-          <ul class="skill-list">
-            <li>Project Management (CAPM)</li>
-            <li>Strategic Thinking</li>
-            <li>Stakeholder Communication</li>
-            <li>Program Design</li>
-            <li>Outreach and Community</li>
-            <li>Jira / Asana</li>
-          </ul>
+      <div class="exp-row">
+        <div class="exp-top">
+          <span class="exp-role">Summer Consulting Intern</span>
+          <span class="exp-date">May - Aug 2024</span>
         </div>
-
-        <div>
-          <p class="skill-col-label">Data and Research</p>
-          <ul class="skill-list">
-            <li>Python</li>
-            <li>R</li>
-            <li>SQL</li>
-            <li>Excel (Pivot Tables, VLOOKUP)</li>
-            <li>Power BI</li>
-            <li>HTML / CSS / Supabase</li>
-          </ul>
-        </div>
-
-        <div>
-          <p class="skill-col-label">People and Facilitation</p>
-          <ul class="skill-list">
-            <li>Workshop Facilitation</li>
-            <li>Public Speaking</li>
-            <li>Community Building</li>
-            <li>Mentorship</li>
-            <li>Cross-functional Teamwork</li>
-          </ul>
-        </div>
-
-        <div>
-          <p class="skill-col-label">Learning and exploring</p>
-          <ul class="skill-list">
-            <li>Healthcare Management</li>
-            <li>Startup Operations</li>
-            <li>Financial Modelling</li>
-          </ul>
-        </div>
-
+        <span class="exp-org">Prollenium Medical Technologies</span>
+        <span class="exp-desc">Root cause analysis on R&D workflow issue (~$2K loss); risk assessments and revised operating procedures.</span>
       </div>
-    </section>
 
-    <!-- Volunteering -->
-    <section id="volunteering">
-      <p class="eyebrow">Giving back</p>
-      <h2 class="s-title">2,000+ hours of<br /><em>community work.</em></h2>
-      <div class="vol-grid">
-        <div class="vol-card">
-          <p class="vol-role">Outreach Ambassador and Web Developer</p>
-          <p class="vol-org">STEM Fellowship</p>
-          <p class="vol-date">Feb 2020 - Jun 2023</p>
+    </div>
+  </div>
+
+  <!-- Projects -->
+  <div class="card" id="card-projects">
+    <div class="section-label">Projects</div>
+    <div class="proj-grid">
+
+      <div class="proj-item">
+        <div class="proj-item-top">
+          <span class="proj-name">Strika</span>
+          <a href="https://github.com/zainabbk/strika" target="_blank" class="proj-arrow">↗</a>
         </div>
-        <div class="vol-card">
-          <p class="vol-role">NICU and Administrative Volunteer</p>
-          <p class="vol-org">Mount Sinai Hospital, Sinai Health</p>
-          <p class="vol-date">Jun 2021 - Aug 2023</p>
+        <span class="proj-type-tag">Mobile App - React Native / Expo / Supabase</span>
+        <span class="proj-desc-text">A FIFA social app for football fans to connect, track games, and build community.</span>
+      </div>
+
+      <div class="proj-item">
+        <div class="proj-item-top">
+          <span class="proj-name">Voiceprint AI</span>
+          <a href="https://github.com/voiceprint-ai/voiceprint-ai" target="_blank" class="proj-arrow">↗</a>
         </div>
-        <div class="vol-card">
-          <p class="vol-role">Science Communication Editor</p>
-          <p class="vol-org">Youth STEM 2030</p>
-          <p class="vol-date">Apr 2020 - Jan 2023</p>
+        <span class="proj-type-tag">AI / Full Stack - IBM Watsonx Hackathon</span>
+        <span class="proj-desc-text">Builds a personal voice profile from your writing, then scores new drafts for consistency. Next.js, Firebase, IBM Granite.</span>
+      </div>
+
+      <div class="proj-item">
+        <div class="proj-item-top">
+          <span class="proj-name">Splice Site Quantification</span>
+          <a href="https://devpost.com/software/splice-site-strength-quantification" target="_blank" class="proj-arrow">↗</a>
         </div>
-        <div class="vol-card">
-          <p class="vol-role">Program Organizer</p>
-          <p class="vol-org">hEr VOLUTION</p>
-          <p class="vol-date">Mar 2020 - Apr 2021</p>
-        </div>
-        <div class="vol-card">
-          <p class="vol-role">Ontario Ambassador</p>
-          <p class="vol-org">Free The Children / WE</p>
-          <p class="vol-date">Sep 2018 - Jun 2023</p>
-        </div>
-        <div class="vol-card">
-          <p class="vol-role">Web Developer</p>
-          <p class="vol-org">Simply Neuroscience</p>
-          <p class="vol-date"></p>
-        </div>
-        <div class="vol-card">
-          <p class="vol-role">Tutor</p>
-          <p class="vol-org">WAVE Learning Festival</p>
-          <p class="vol-date"></p>
-        </div>
-        <div class="vol-card">
-          <p class="vol-role">Volunteer</p>
-          <p class="vol-org">Abu Huraira Centre</p>
-          <p class="vol-date"></p>
-        </div>
-        <div class="vol-card">
-          <p class="vol-role">Teacher</p>
-          <p class="vol-org">Al Huda</p>
-          <p class="vol-date"></p>
-        </div>
-        <div class="vol-card">
-          <p class="vol-role">Volunteer</p>
-          <p class="vol-org">Providence Healthcare</p>
-          <p class="vol-date"></p>
-        </div>
-        <div class="vol-card">
-          <p class="vol-role">Volunteer</p>
-          <p class="vol-org">Michael Garron Hospital</p>
-          <p class="vol-date"></p>
-        </div>
-        <div class="vol-card">
-          <p class="vol-role">Researcher</p>
-          <p class="vol-org">The Neurochain Initiative</p>
-          <p class="vol-date"></p>
+        <span class="proj-type-tag">Computational Biology - TBH Bioinformatics</span>
+        <span class="proj-desc-text">Cross-species framework to quantify splice site strength and uncover evolutionary patterns in vertebrate splicing.</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Skills -->
+  <div class="card" id="card-skills">
+    <div class="section-label">Skills</div>
+    <div class="skills-cols">
+      <div>
+        <div class="skill-group-label">Strategy and PM</div>
+        <div class="skill-tags">
+          <span class="skill-tag">CAPM</span>
+          <span class="skill-tag">Stakeholder Mgmt</span>
+          <span class="skill-tag">Jira</span>
+          <span class="skill-tag">Asana</span>
+          <span class="skill-tag">Notion</span>
+          <span class="skill-tag">Program Design</span>
         </div>
       </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact">
-      <p class="eyebrow">Contact</p>
-      <h2 class="s-title">Let's<br /><em>connect.</em></h2>
-      <p class="contact-sub">Open to PM internships, analyst roles, research, and conversations about health, startups, or strategy. Always happy to chat.</p>
-      <div class="contact-links">
-        <a href="mailto:zainabb.khan@mail.utoronto.ca" class="btn btn-primary">Email me</a>
-        <a href="https://linkedin.com/in/zainabb-khan1" target="_blank" class="btn btn-ghost">LinkedIn</a>
-        <a href="https://github.com/hackbio-ca" target="_blank" class="btn btn-ghost">GitHub</a>
+      <div>
+        <div class="skill-group-label">Data and Research</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">R</span>
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">Excel</span>
+          <span class="skill-tag">Power BI</span>
+          <span class="skill-tag">HTML/CSS</span>
+          <span class="skill-tag">Supabase</span>
+        </div>
       </div>
-    </section>
+      <div>
+        <div class="skill-group-label">People</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Facilitation</span>
+          <span class="skill-tag">Public Speaking</span>
+          <span class="skill-tag">Community</span>
+          <span class="skill-tag">Mentorship</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-label">Exploring</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Product Mgmt</span>
+          <span class="skill-tag">Technical Ops</span>
+          <span class="skill-tag">Healthcare Mgmt</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  </main>
+  <!-- Volunteering -->
+  <div class="card" id="card-vol">
+    <div class="section-label">Giving Back</div>
+    <div class="vol-count">2,000+</div>
+    <div class="vol-sub">hours of community work</div>
+    <div class="vol-pills">
+      <span class="vol-pill highlight">STEM Fellowship</span>
+      <span class="vol-pill highlight">Mount Sinai NICU</span>
+      <span class="vol-pill highlight">Youth STEM 2030</span>
+      <span class="vol-pill highlight">hEr VOLUTION</span>
+      <span class="vol-pill highlight">Free The Children</span>
+      <span class="vol-pill">Simply Neuroscience</span>
+      <span class="vol-pill">WAVE Learning Festival</span>
+      <span class="vol-pill">Abu Huraira Centre</span>
+      <span class="vol-pill">Al Huda</span>
+      <span class="vol-pill">Providence Healthcare</span>
+      <span class="vol-pill">Michael Garron Hospital</span>
+      <span class="vol-pill">Neurochain Initiative</span>
+    </div>
+  </div>
 
-  <footer>
-    <span>Zainab Khan - Toronto, 2026</span>
-    <span>Built with care</span>
-  </footer>
+</div>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const canvas = document.getElementById('sparkle-canvas');
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let mouseX = 0, mouseY = 0;
+  const sparkles = [];
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+    if (Math.random() < 0.35) {
+      const colors = ['rgba(168,180,200,', 'rgba(201,189,232,', 'rgba(232,196,212,'];
+      sparkles.push({
+        x: mouseX + (Math.random() - 0.5) * 10,
+        y: mouseY + (Math.random() - 0.5) * 10,
+        size: Math.random() * 2 + 0.5,
+        alpha: 0.9,
+        vx: (Math.random() - 0.5) * 0.7,
+        vy: (Math.random() - 0.5) * 0.7 - 0.4,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      });
+    }
+  });
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = sparkles.length - 1; i >= 0; i--) {
+      const s = sparkles[i];
+      s.x += s.vx; s.y += s.vy; s.alpha -= 0.022;
+      if (s.alpha <= 0) { sparkles.splice(i, 1); continue; }
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+      ctx.fillStyle = s.color + s.alpha + ')';
+      ctx.fill();
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
 
 </body>
 </html>
